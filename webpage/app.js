@@ -13,10 +13,12 @@ statusText.addEventListener('click', function() {
 
 function handleHeartRateMeasurement(heartRateMeasurement) {
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
+    console.log('New notification');
     var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
-    statusText.innerHTML = heartRateMeasurement.heartRate + ' &#x2764;';
-    heartRates.push(heartRateMeasurement.heartRate);
-    drawWaves();
+    statusText.textContent = heartRateMeasurement;
+    //statusText.innerHTML = heartRateMeasurement.heartRate;
+    //heartRates.push(heartRateMeasurement.heartRate);
+    //drawWaves();
   });
 }
 
