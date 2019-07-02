@@ -40,7 +40,7 @@ var heartRates = [];
 var mode = 'bar';
 
 canvas.addEventListener('click', event => {
-  mode = line;
+  mode === 'line';
   //mode = mode === 'bar' ? 'line' : 'bar';
   drawWaves();
 });
