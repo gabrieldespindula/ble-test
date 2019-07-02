@@ -11,16 +11,41 @@ statusText.addEventListener('click', function() {
   });
 });
 
+//function handleHeartRateMeasurement(heartRateMeasurement) {
+//  console.log('New event');
+//  heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
+//    console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
+//    //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
+//    statusText.textContent = 'Accelerometer = ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2);
+//    //statusText.innerHTML = heartRateMeasurement.heartRate;
+//    //heartRates.push(heartRateMeasurement.heartRate);
+//    //drawWaves();
+//  });
+//}
+
 function handleHeartRateMeasurement(heartRateMeasurement) {
   console.log('New event');
+  var postscale = 0;
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
-    console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
+    //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
+    var accX;
     //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
-    statusText.textContent = 'Accelerometer = ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2);
+    var sign = event.target.value.getUint8(1) & (1 << 7);
+    var accX = (((event.target.value.getUint8(1) & 0xFF) << 8) | (event.target.value.getUint8(0) & 0xFF));
+    if (sign) {
+       accX = 0xFFFF0000 | accX;  // fill in most significant bits with 1's
+    }
+    statusText.textContent = 'Accelerometer X = ' + accX;
+    postscale++;
+    if(postscale>=50){
+      postscale=0,
+      heartRates.push(accX + 32767);
+      drawWaves();
+    }
     //statusText.innerHTML = heartRateMeasurement.heartRate;
     //heartRates.push(heartRateMeasurement.heartRate);
     //drawWaves();
-  });
+    });
 }
 
 var heartRates = [];
