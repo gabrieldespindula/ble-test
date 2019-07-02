@@ -130,7 +130,7 @@ function drawWaves() {
     
     var square_side = canvas.width/256;
     for(var i = 0; i<256 ; i++){
-      var RR = (((i*5).toString(16).length==1)?"0"+(i*5).toString(16):(i*5).toString(16))
+      var RR = (((i).toString(16).length==1)?"0"+(i).toString(16):(i).toString(16))
       context.fillStyle = '#'+RR+'0000';
       context.fillRect(i*square_side, 10, square_side, square_side);
       context.stroke();
