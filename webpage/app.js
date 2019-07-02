@@ -126,6 +126,7 @@ function drawWaves() {
         }
         context.stroke();
       }
+    }
   });
 }
 
