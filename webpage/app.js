@@ -87,8 +87,8 @@ function drawWaves() {
       context.shadowBlur = '1';
       context.shadowColor = '#333';
       context.shadowOffsetY = '1';
-      for (var i = 0; i < Math.max(heartRates.length, max); i++) {
-        var lineHeight = Math.round(5*canvas.height/6 + heartRates[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
+      for (var i = 0; i < Math.max(accelerometerX.length, max); i++) {
+        var lineHeight = Math.round(5*canvas.height/6 + accelerometerX[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
         if (i === 0) {
           context.moveTo(11 * i, canvas.height - lineHeight);
         } else {
@@ -96,7 +96,36 @@ function drawWaves() {
         }
         context.stroke();
       }
-    }
+      context.beginPath();
+      context.lineWidth = 6;
+      context.lineJoin = 'round';
+      context.shadowBlur = '1';
+      context.shadowColor = 'blue';
+      context.shadowOffsetY = '1';
+      for (var i = 0; i < Math.max(accelerometerY.length, max); i++) {
+        var lineHeight = Math.round(3*canvas.height/6 + accelerometerY[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
+        if (i === 0) {
+          context.moveTo(11 * i, canvas.height - lineHeight);
+        } else {
+          context.lineTo(11 * i, canvas.height - lineHeight);
+        }
+        context.stroke();
+      }
+      context.beginPath();
+      context.lineWidth = 6;
+      context.lineJoin = 'round';
+      context.shadowBlur = '1';
+      context.shadowColor = 'red';
+      context.shadowOffsetY = '1';
+      for (var i = 0; i < Math.max(accelerometerZ.length, max); i++) {
+        var lineHeight = Math.round(1*canvas.height/6 + accelerometerZ[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
+        if (i === 0) {
+          context.moveTo(11 * i, canvas.height - lineHeight);
+        } else {
+          context.lineTo(11 * i, canvas.height - lineHeight);
+        }
+        context.stroke();
+      }
   });
 }
 
