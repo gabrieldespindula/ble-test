@@ -8,7 +8,7 @@
       this._characteristics = new Map();
     }
     connect() {
-      return navigator.bluetooth.requestDevice({filters:[{services:[ 'TKBA 71 CCFF' ]}]})
+      return navigator.bluetooth.requestDevice({filters:[{services: [0x1800, 0x1801, 0x180A]}]})
       .then(device => {
         this.device = device;
         return device.gatt.connect();
