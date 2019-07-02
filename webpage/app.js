@@ -16,7 +16,7 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
     console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
     //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
-    statusText.textContent = event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2);
+    statusText.textContent = 'Accelerometer = ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2);
     //statusText.innerHTML = heartRateMeasurement.heartRate;
     //heartRates.push(heartRateMeasurement.heartRate);
     //drawWaves();
