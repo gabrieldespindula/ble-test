@@ -17,6 +17,7 @@ statusText.addEventListener('click', function() {
 function handleHeartRateMeasurement(heartRateMeasurement) {
   console.log('New event');
   var postscale = 0;
+  statusText.textContent = ' ';
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
     //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
     var accX, accY, accZ;
@@ -36,7 +37,7 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
     if (sign) {
        accZ = 0xFFFF0000 | accZ;  // fill in most significant bits with 1's
     }
-    statusText.textContent = 'Accelerometer Y = ' + accY;
+
     postscale++;
     if(postscale>=20){
       postscale=0,
