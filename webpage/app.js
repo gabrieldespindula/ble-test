@@ -74,7 +74,7 @@ function drawWaves() {
     var max = Math.max(0, Math.round(canvas.width / 11));
     var offset = Math.max(0, heartRates.length - max);
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.strokeStyle = 'dark green';
+    context.strokeStyle = '#581845';
     if (mode === 'bar') {
       for (var i = 0; i < Math.max(heartRates.length, max); i++) {
         var barHeight = Math.round(5*canvas.height/6 + heartRates[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
@@ -100,7 +100,7 @@ function drawWaves() {
       context.lineWidth = 6;
       context.lineJoin = 'round';
       context.shadowBlur = '1';
-      context.strokeStyle = 'blue';
+      context.strokeStyle = '#900c3f';
       context.shadowOffsetY = '1';
       for (var i = 0; i < Math.max(accelerometerY.length, max); i++) {
         var lineHeight = Math.round(3*canvas.height/6 + accelerometerY[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
@@ -115,7 +115,7 @@ function drawWaves() {
       context.lineWidth = 6;
       context.lineJoin = 'round';
       context.shadowBlur = '1';
-      context.strokeStyle = 'purple';
+      context.strokeStyle = 'c70039';
       context.shadowOffsetY = '1';
       for (var i = 0; i < Math.max(accelerometerZ.length, max); i++) {
         var lineHeight = Math.round(1*canvas.height/6 + accelerometerZ[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
