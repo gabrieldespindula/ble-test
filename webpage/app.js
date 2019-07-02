@@ -26,12 +26,12 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
     if (sign) {
        accX = 0xFFFF0000 | accX;  // fill in most significant bits with 1's
     }
-    var sign = event.target.value.getUint8(2) & (1 << 7);
+    var sign = event.target.value.getUint8(3) & (1 << 7);
     var accY = (((event.target.value.getUint8(3) & 0xFF) << 8) | (event.target.value.getUint8(2) & 0xFF));
     if (sign) {
        accY = 0xFFFF0000 | accY;  // fill in most significant bits with 1's
     }
-    var sign = event.target.value.getUint8(4) & (1 << 7);
+    var sign = event.target.value.getUint8(5) & (1 << 7);
     var accZ = (((event.target.value.getUint8(5) & 0xFF) << 8) | (event.target.value.getUint8(4) & 0xFF));
     if (sign) {
        accZ = 0xFFFF0000 | accZ;  // fill in most significant bits with 1's
