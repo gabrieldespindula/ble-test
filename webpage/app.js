@@ -12,10 +12,11 @@ statusText.addEventListener('click', function() {
 });
 
 function handleHeartRateMeasurement(heartRateMeasurement) {
+  console.log('New event');
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
-    console.log('New notification');
-    var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
-    statusText.textContent = heartRateMeasurement;
+    console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
+    //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
+    statusText.textContent = event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2);
     //statusText.innerHTML = heartRateMeasurement.heartRate;
     //heartRates.push(heartRateMeasurement.heartRate);
     //drawWaves();
