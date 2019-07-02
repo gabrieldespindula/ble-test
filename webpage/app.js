@@ -11,18 +11,6 @@ statusText.addEventListener('click', function() {
   });
 });
 
-//function handleHeartRateMeasurement(heartRateMeasurement) {
-//  console.log('New event');
-//  heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
-//    console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
-//    //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
-//    statusText.textContent = 'Accelerometer = ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2);
-//    //statusText.innerHTML = heartRateMeasurement.heartRate;
-//    //heartRates.push(heartRateMeasurement.heartRate);
-//    //drawWaves();
-//  });
-//}
-
 function handleHeartRateMeasurement(heartRateMeasurement) {
   console.log('New event');
   var postscale = 0;
@@ -37,9 +25,9 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
     }
     statusText.textContent = 'Accelerometer X = ' + accX;
     postscale++;
-    if(postscale>=50){
+    if(postscale>=20){
       postscale=0,
-      heartRates.push(accX + 32767);
+      heartRates.push(accX);
       drawWaves();
     }
     //statusText.innerHTML = heartRateMeasurement.heartRate;
@@ -52,7 +40,8 @@ var heartRates = [];
 var mode = 'bar';
 
 canvas.addEventListener('click', event => {
-  mode = mode === 'bar' ? 'line' : 'bar';
+  mode = line;
+  //mode = mode === 'bar' ? 'line' : 'bar';
   drawWaves();
 });
 
@@ -69,7 +58,7 @@ function drawWaves() {
     context.strokeStyle = '#00796B';
     if (mode === 'bar') {
       for (var i = 0; i < Math.max(heartRates.length, max); i++) {
-        var barHeight = Math.round(heartRates[i + offset ] * canvas.height / 200);
+        var barHeight = Math.round(5*canvas.height/6 + heartRates[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
         context.rect(11 * i + margin, canvas.height - barHeight, margin, Math.max(0, barHeight - margin));
         context.stroke();
       }
@@ -81,7 +70,7 @@ function drawWaves() {
       context.shadowColor = '#333';
       context.shadowOffsetY = '1';
       for (var i = 0; i < Math.max(heartRates.length, max); i++) {
-        var lineHeight = Math.round(heartRates[i + offset ] * canvas.height / 200);
+        var lineHeight = Math.round(5*canvas.height/6 + heartRates[i + offset ]/100);//Math.round(heartRates[i + offset ] * canvas.height / 200);
         if (i === 0) {
           context.moveTo(11 * i, canvas.height - lineHeight);
         } else {
