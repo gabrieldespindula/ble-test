@@ -2,7 +2,7 @@ var canvas = document.querySelector('canvas');
 var statusText = document.querySelector('#statusText');
 
 statusText.addEventListener('click', function() {
-  statusText.textContent = 'Breathe...';
+  statusText.textContent = 'Connecting...';
   heartRates = [];
   heartRateSensor.connect()
   .then(() => heartRateSensor.startNotificationsHeartRateMeasurement().then(handleHeartRateMeasurement))
@@ -37,13 +37,12 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
 }
 
 var heartRates = [];
-var mode = 'bar';
+var mode = 'line';
 
-canvas.addEventListener('click', event => {
-  mode === 'line';
-  //mode = mode === 'bar' ? 'line' : 'bar';
-  drawWaves();
-});
+//canvas.addEventListener('click', event => {
+//  mode = mode === 'bar' ? 'line' : 'bar';
+//  drawWaves();
+//});
 
 function drawWaves() {
   requestAnimationFrame(() => {
