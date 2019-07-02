@@ -8,18 +8,24 @@
       this._characteristics = new Map();
     }
     connect() {
-      return navigator.bluetooth.requestDevice({filters:[{services: [0x1800, 0x1801, 0x180A]}]})
+      return navigator.bluetooth.requestDevice({
+        filters: [{
+          services : ['f0ba1b00-c6b5-11e2-8b8b-0800200c9a66']
+        }]
+      })
       .then(device => {
         this.device = device;
         return device.gatt.connect();
       })
       .then(server => {
         this.server = server;
+        console.log('Getting Service');
         return Promise.all([
-          server.getPrimaryService('heart_rate').then(service => {
+          server.getPrimaryService('f0ba1b00-c6b5-11e2-8b8b-0800200c9a66').then(service => {
+            console.log('Primary service ok...');
             return Promise.all([
-              this._cacheCharacteristic(service, 'body_sensor_location'),
-              this._cacheCharacteristic(service, 'heart_rate_measurement'),
+              this._cacheCharacteristic(service, 'f0ba1b02-c6b5-11e2-8b8b-0800200c9a66'),
+              this._cacheCharacteristic(service, 'f0ba1b03-c6b5-11e2-8b8b-0800200c9a66'),
             ])
           })
         ]);
@@ -45,10 +51,11 @@
      });
     }
     startNotificationsHeartRateMeasurement() {
-      return this._startNotifications('heart_rate_measurement');
+      console.log('Starting notifications');
+      return this._startNotifications('f0ba1b02-c6b5-11e2-8b8b-0800200c9a66');
     }
     stopNotificationsHeartRateMeasurement() {
-      return this._stopNotifications('heart_rate_measurement');
+      return this._stopNotifications('f0ba1b02-c6b5-11e2-8b8b-0800200c9a66');
     }
     parseHeartRate(value) {
       // In Chrome 50+, a DataView is returned instead of an ArrayBuffer.
