@@ -4,6 +4,9 @@ var statusText = document.querySelector('#statusText');
 statusText.addEventListener('click', function() {
   statusText.textContent = 'Connecting...';
   heartRates = [];
+  accelerometerX = [];
+  accelerometerY = [];
+  accelerometerZ = [];
   heartRateSensor.connect()
   .then(() => heartRateSensor.startNotificationsHeartRateMeasurement().then(handleHeartRateMeasurement))
   .catch(error => {
@@ -16,18 +19,31 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
   var postscale = 0;
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
     //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
-    var accX;
+    var accX, accY, accZ;
     //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
     var sign = event.target.value.getUint8(1) & (1 << 7);
     var accX = (((event.target.value.getUint8(1) & 0xFF) << 8) | (event.target.value.getUint8(0) & 0xFF));
     if (sign) {
        accX = 0xFFFF0000 | accX;  // fill in most significant bits with 1's
     }
-    statusText.textContent = 'Accelerometer X = ' + accX;
+    var sign = event.target.value.getUint8(2) & (1 << 7);
+    var accY = (((event.target.value.getUint8(3) & 0xFF) << 8) | (event.target.value.getUint8(2) & 0xFF));
+    if (sign) {
+       accY = 0xFFFF0000 | accY;  // fill in most significant bits with 1's
+    }
+    var sign = event.target.value.getUint8(4) & (1 << 7);
+    var accZ = (((event.target.value.getUint8(5) & 0xFF) << 8) | (event.target.value.getUint8(4) & 0xFF));
+    if (sign) {
+       accZ = 0xFFFF0000 | accZ;  // fill in most significant bits with 1's
+    }
+    statusText.textContent = 'Accelerometer Y = ' + accY;
     postscale++;
     if(postscale>=20){
       postscale=0,
-      heartRates.push(accX);
+      heartRates.push(accY);
+      accelerometerX.push(accX);
+      accelerometerY.push(accY);
+      accelerometerZ.push(accZ);
       drawWaves();
     }
     //statusText.innerHTML = heartRateMeasurement.heartRate;
@@ -37,6 +53,9 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
 }
 
 var heartRates = [];
+var accelerometerX = [];
+var accelerometerY = [];
+var accelerometerZ = [];
 var mode = 'line';
 
 //canvas.addEventListener('click', event => {
@@ -88,3 +107,4 @@ document.addEventListener("visibilitychange", () => {
     drawWaves();
   }
 });
+
