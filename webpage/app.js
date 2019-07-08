@@ -9,17 +9,19 @@ statusText.addEventListener('click', function() {
   accelerometerZ = [];
   heartRateSensor.connect()
   .then(() => heartRateSensor.startNotificationsHeartRateMeasurement().then(handleHeartRateMeasurement))
+  .then(() => heartRateSensor.startNotificationsCCD().then(handleCCD))
   .catch(error => {
     statusText.textContent = error;
   });
 });
 
 function handleHeartRateMeasurement(heartRateMeasurement) {
-  console.log('New event');
+  console.log('Accelerometer event settled');
   var postscale = 0;
-  statusText.textContent = ' ';
+  
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
     //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
+    //statusText.textContent = event.target.value.getUint8(0) + event.target.value.getUint8(1) + event.target.value.getUint8(2) + event.target.value.getUint8(3) + event.target.value.getUint8(1) + event.target.value.getUint8(4) + event.target.value.getUint8(5);
     var accX, accY, accZ;
     //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
     var sign = event.target.value.getUint8(1) & (1 << 7);
@@ -40,23 +42,41 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
 
     postscale++;
     if(postscale>=20){
-      postscale=0,
-      heartRates.push(accY);
-      accelerometerX.push(accX);
-      accelerometerY.push(accY);
-      accelerometerZ.push(accZ);
-      drawWaves();
+      postscale=0;
+//      heartRates.push(accY);
+//      accelerometerX.push(accX);
+//      accelerometerY.push(accY);
+//      accelerometerZ.push(accZ);
+//      drawWaves();
     }
-    //statusText.innerHTML = heartRateMeasurement.heartRate;
-    //heartRates.push(heartRateMeasurement.heartRate);
-    //drawWaves();
-    });
+  });
+}
+
+function handleCCD(heartRateMeasurement) {
+  console.log('CCD event settled');
+  var postscale = 0;
+  
+  heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
+    //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
+    //statusText.textContent = event.target.value.getUint8(0) + event.target.value.getUint8(1) + event.target.value.getUint8(2) + event.target.value.getUint8(3) + event.target.value.getUint8(1) + event.target.value.getUint8(4) + event.target.value.getUint8(5);
+    statusText.textContent = event.target.byteLenght;
+    //console.log(event.target.value);
+    if((event.target.value.getUint8(0) == 250 && event.target.value.getUint8(1) == 250) || postscale > 25){
+      postscale=0;
+    }
+    for(var i=0 ; i<20 ; i+=2){
+      ccd[postscale*10+i/2]=event.target.value.getUint8(i);
+    }
+    postscale++;
+    drawWaves();
+  });
 }
 
 var heartRates = [];
 var accelerometerX = [];
 var accelerometerY = [];
 var accelerometerZ = [];
+var ccd = Array(260).fill(0);
 var mode = 'line';
 
 //canvas.addEventListener('click', event => {
@@ -129,13 +149,14 @@ function drawWaves() {
     }
     
     var square_side = canvas.width/256;
-    for(var i = 0; i<256 ; i++){
-      var RR = (((i).toString(16).length==1)?"0"+(i).toString(16):(i).toString(16))
+    for(var i = 0; i<260 ; i++)
+    {
+      var pixel = ccd[i].toString(16);
+      var RR = ((pixel.length==1)?("0"+pixel):(pixel));
       context.fillStyle = '#'+RR+'0000';
       context.fillRect(i*square_side, 10, square_side, square_side);
       context.stroke();
     }
-    
   });
 }
 
