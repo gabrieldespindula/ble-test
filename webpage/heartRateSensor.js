@@ -24,6 +24,7 @@
           server.getPrimaryService('f0ba1b00-c6b5-11e2-8b8b-0800200c9a66').then(service => {
             console.log('Primary service ok...');
             return Promise.all([
+              this._cacheCharacteristic(service, 'f0ba1b01-c6b5-11e2-8b8b-0800200c9a66'),
               this._cacheCharacteristic(service, 'f0ba1b02-c6b5-11e2-8b8b-0800200c9a66'),
               this._cacheCharacteristic(service, 'f0ba1b03-c6b5-11e2-8b8b-0800200c9a66'),
             ])
@@ -50,8 +51,12 @@
         }
      });
     }
+    startNotificationsCCD() {
+      console.log('Starting notifications for CCD');
+      return this._startNotifications('f0ba1b01-c6b5-11e2-8b8b-0800200c9a66');
+    }
     startNotificationsHeartRateMeasurement() {
-      console.log('Starting notifications');
+      console.log('Starting notifications for Accelerometer');
       return this._startNotifications('f0ba1b02-c6b5-11e2-8b8b-0800200c9a66');
     }
     stopNotificationsHeartRateMeasurement() {
