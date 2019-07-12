@@ -60,13 +60,14 @@ function handleCCD(heartRateMeasurement) {
     //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
     //statusText.textContent = event.target.value.getUint8(0) + event.target.value.getUint8(1) + event.target.value.getUint8(2) + event.target.value.getUint8(3) + event.target.value.getUint8(1) + event.target.value.getUint8(4) + event.target.value.getUint8(5);
     statusText.textContent = event.target.byteLenght;
-    //console.log(event.target.value);
+    console.log(event.target.value);
     if((event.target.value.getUint8(0) == 250 && event.target.value.getUint8(1) == 250) || postscale > 25){
       postscale=0;
     }
     for(var i=0 ; i<20 ; i+=2){
-      ccd[postscale*10+i/2]=event.target.value.getUint8(i);
+      ccd[postscale*10+i/2]=(((event.target.value.getUint8(i) & 0xFF) << 8) | (event.target.value.getUint8(i+1) & 0xFF));
     }
+    ccd[postscale*10+10]=0xaaaaaaaa;
     postscale++;
     drawWaves();
   });
@@ -149,13 +150,22 @@ function drawWaves() {
     }
     
     var square_side = canvas.width/256;
-    for(var i = 0; i<260 ; i++)
+    for(var i = 0; i<256 ; i++)
     {
-      var pixel = ccd[i].toString(16);
+      var pixel = ((ccd[i]>>4).toString(16)&0xff);
       var RR = ((pixel.length==1)?("0"+pixel):(pixel));
       context.fillStyle = '#'+RR+'0000';
       context.fillRect(i*square_side, 10, square_side, square_side);
       context.stroke();
+
+      context.lineWidth = 6;
+      context.lineJoin = 'round';
+      context.shadowBlur = '1';
+      if (i === 0) {
+        context.moveTo(square_side * i, canvas.height - (ccd[i]>>4)&0xff);
+      } else {
+          context.lineTo(square_side * i, canvas.height -(ccd[i]>>4)&0xff);
+      }
     }
   });
 }
@@ -167,4 +177,3 @@ document.addEventListener("visibilitychange", () => {
     drawWaves();
   }
 });
-
