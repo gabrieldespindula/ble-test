@@ -162,9 +162,9 @@ function drawWaves() {
       context.lineJoin = 'round';
       context.shadowBlur = '1';
       if (i === 0) {
-        context.moveTo(square_side * i, canvas.height - (ccd[i]>>4)&0xff);
+        context.moveTo(square_side * i, -(ccd[i]>>4)&0xff);
       } else {
-          context.lineTo(square_side * i, canvas.height -(ccd[i]>>4)&0xff);
+          context.lineTo(square_side * i, -(ccd[i]>>4)&0xff);
       }
     }
   });
