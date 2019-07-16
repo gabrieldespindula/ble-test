@@ -20,7 +20,7 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
   var postscale = 0;
   
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
-    //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
+    console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
     //statusText.textContent = event.target.value.getUint8(0) + event.target.value.getUint8(1) + event.target.value.getUint8(2) + event.target.value.getUint8(3) + event.target.value.getUint8(1) + event.target.value.getUint8(4) + event.target.value.getUint8(5);
     var accX, accY, accZ;
     //var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
@@ -44,10 +44,10 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
     if(postscale>=20){
       postscale=0;
 //      heartRates.push(accY);
-//      accelerometerX.push(accX);
-//      accelerometerY.push(accY);
+//     accelerometerX.push(accX);
+      accelerometerY.push(accY);
 //      accelerometerZ.push(accZ);
-//      drawWaves();
+      drawWaves();
     }
   });
 }
@@ -60,7 +60,7 @@ function handleCCD(heartRateMeasurement) {
     //console.log('New notification - ' + event.target.value.getUint8(0) + ' ' + event.target.value.getUint8(1) + ' ' + event.target.value.getUint8(2));
     //statusText.textContent = event.target.value.getUint8(0) + event.target.value.getUint8(1) + event.target.value.getUint8(2) + event.target.value.getUint8(3) + event.target.value.getUint8(1) + event.target.value.getUint8(4) + event.target.value.getUint8(5);
     statusText.textContent = event.target.byteLenght;
-    console.log(event.target.value);
+    //console.log(event.target.value);
     if((event.target.value.getUint8(0) == 250 && event.target.value.getUint8(1) == 250) || postscale > 25){
       postscale=0;
     }
@@ -155,7 +155,7 @@ function drawWaves() {
       var pixel = ((ccd[i]>>4).toString(16)&0xff);
       var RR = ((pixel.length==1)?("0"+pixel):(pixel));
       context.fillStyle = '#'+RR+'0000';
-      context.fillRect(i*square_side, 10, square_side, square_side);
+      context.fillRect(i*square_side, 30, square_side, 30);
       context.stroke();
 
       context.lineWidth = 6;
