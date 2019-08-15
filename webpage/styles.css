@@ -1,11 +1,12 @@
-#container {
-  position: absolute;
+#chartContainer {
+  position: relative;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: #777777;
+  background-color: #7b7b7b;
   font-family: Roboto;
+  height: 90%;
 }
 
 #statusText {
