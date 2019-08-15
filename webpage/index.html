@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLE to TKBA</title>
@@ -8,12 +9,61 @@
     <link rel="icon" sizes="192x192" href="../favicon.png">
     <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
+  <body class="p-5">
+
+    <h1>BLE Test</h1>
+
     <div id="container">
-      <div id="statusText">Click here to find device;</div>
-      <canvas id="waves"></canvas>
+      <div class="row p-3">
+        <div class="col-md3">
+          <div class="dropdown show">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              CCD Mode 3
+            </a>
+            <div id="ccdModeSelector" style="display:none">3</div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Mode 1</a>
+              <a class="dropdown-item" href="#">Mode 2</a>
+              <a class="dropdown-item active" href="#">Mode 3</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md3 ml-3">
+          <p><b>Integration time:</b> <value id="intTime"> ???</value><br>
+             <b>Distance:</b> <value id="laserDistance"> ???</value><br>
+             <b>Laser wave start at:</b> <value id="laserDetectPx"> ???</value><br>
+             <b>Laser wave length:</b> <value id="laserWaveLength"> ???</value><br>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div id="chartContainer">
+            <canvas id="ccdDisplay"></canvas>
+          </div>
+        </div>
+       </div>
+      <div class="row mt-3">
+        <div class="col-sm">
+          <div id="chartContainer">
+            <div id="statusText">Click here to find device;</div>
+            <canvas id="waves"></canvas>
+           </div>
+         </div>
+       </div>
     </div>
     <script src="heartRateSensor.js"></script>
     <script src="app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+      $(".dropdown-menu a").click(function(){
+         $("#dropdownMenuLink").text("CCD " + $(this).text());
+         $(".dropdown-item").removeClass("active");
+         $(this).addClass("active");
+         $("#ccdModeSelector").text($(this).index()+1);
+      });
+    </script>
   </body>
 </html>
