@@ -37,22 +37,41 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12">
-          <div id="chartContainer">
+        <div class="col">
+          <div id="chartContainer" style="height:50px">
             <canvas id="ccdDisplay"></canvas>
           </div>
         </div>
        </div>
       <div class="row mt-3">
-        <div class="col-sm">
-          <div id="chartContainer">
+        <div class="col">
+          <div id="chartContainer" style="height:200px">
             <div id="statusText">Click here to find device;</div>
             <canvas id="waves"></canvas>
            </div>
          </div>
        </div>
+       <div class="row mt-3">
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <form>
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" id="enLog">
+                  <label class="form-check-label" for="enLog"><h5>Log distance</h5></label>
+                  <div id="logEnabled" style="display:none">0</div>
+                </div>
+              </form>
+            </div>
+            <div class="card-body">
+              <ul id="log" class="list-group">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <script src="TKBA.js"></script>
+    <script src="heartRateSensor.js"></script>
     <script src="app.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -63,6 +82,9 @@
          $(".dropdown-item").removeClass("active");
          $(this).addClass("active");
          $("#ccdModeSelector").text($(this).index()+1);
+      });
+      $("#enLog").click(function(){
+        $("#logEnabled").text(this.checked?"1":"0");
       });
     </script>
   </body>
