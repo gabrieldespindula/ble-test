@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  class HeartRateSensor {
+  class TKBA {
     constructor() {
       this.device = null;
       this.server = null;
@@ -33,70 +33,24 @@
       })
     }
 
-    /* Heart Rate Service */
+    /* Notifications */
 
-    getBodySensorLocation() {
-      return this._readCharacteristicValue('body_sensor_location')
-      .then(data => {
-        let sensorLocation = data.getUint8(0);
-        switch (sensorLocation) {
-          case 0: return 'Other';
-          case 1: return 'Chest';
-          case 2: return 'Wrist';
-          case 3: return 'Finger';
-          case 4: return 'Hand';
-          case 5: return 'Ear Lobe';
-          case 6: return 'Foot';
-          default: return 'Unknown';
-        }
-     });
-    }
     startNotificationsCCD() {
       console.log('Starting notifications for CCD');
       return this._startNotifications('f0ba1b01-c6b5-11e2-8b8b-0800200c9a66');
     }
-    startNotificationsHeartRateMeasurement() {
+    stopNotificationsCCD() {
+      console.log('Starting notifications for CCD');
+      return this._stopNotifications('f0ba1b01-c6b5-11e2-8b8b-0800200c9a66');
+    }
+    startNotificationsAccelerometer() {
       console.log('Starting notifications for Accelerometer');
       return this._startNotifications('f0ba1b02-c6b5-11e2-8b8b-0800200c9a66');
     }
-    stopNotificationsHeartRateMeasurement() {
+    stopNotificationsAccelerometer() {
       return this._stopNotifications('f0ba1b02-c6b5-11e2-8b8b-0800200c9a66');
     }
-    parseHeartRate(value) {
-      // In Chrome 50+, a DataView is returned instead of an ArrayBuffer.
-      value = value.buffer ? value : new DataView(value);
-      let flags = value.getUint8(0);
-      let rate16Bits = flags & 0x1;
-      let result = {};
-      let index = 1;
-      if (rate16Bits) {
-        result.heartRate = value.getUint16(index, /*littleEndian=*/true);
-        index += 2;
-      } else {
-        result.heartRate = value.getUint8(index);
-        index += 1;
-      }
-      let contactDetected = flags & 0x2;
-      let contactSensorPresent = flags & 0x4;
-      if (contactSensorPresent) {
-        result.contactDetected = !!contactDetected;
-      }
-      let energyPresent = flags & 0x8;
-      if (energyPresent) {
-        result.energyExpended = value.getUint16(index, /*littleEndian=*/true);
-        index += 2;
-      }
-      let rrIntervalPresent = flags & 0x10;
-      if (rrIntervalPresent) {
-        let rrIntervals = [];
-        for (; index + 1 < value.byteLength; index += 2) {
-          rrIntervals.push(value.getUint16(index, /*littleEndian=*/true));
-        }
-        result.rrIntervals = rrIntervals;
-      }
-      return result;
-    }
-
+    
     /* Utils */
 
     _cacheCharacteristic(service, characteristicUuid) {
@@ -134,6 +88,6 @@
     }
   }
 
-  window.heartRateSensor = new HeartRateSensor();
+  window.tkba = new TKBA();
 
 })();
