@@ -6,6 +6,7 @@ var lbLaserDist = document.getElementById("laserDistance");
 var lbLaserStart = document.getElementById("laserDetectPx");
 var lbLaserLength = document.getElementById("laserWaveLength");
 var ccdMode = document.getElementById("ccdModeSelector");
+var logEn = document.getElementById("logEnabled");
 
 var heartRates = [];
 var accelerometerX = [];
@@ -13,7 +14,9 @@ var accelerometerY = [];
 var accelerometerZ = [];
 var laserStart, laserLenght;
 var chartLenght = 256;
+var distance;
 var ccd = Array(260).fill(0);
+var nLogs = 0;
 
 statusText.addEventListener('click', function() {
   statusText.textContent = 'Connecting...';
@@ -85,12 +88,19 @@ function handleCCD(ccdData) {
       data.forEach(function (b, i) {
           view.setUint8(i, b);
       });
-      var num = view.getFloat32(0);
-      lbLaserDist.innerHTML = num.toString() + "mm";
+      distance = view.getFloat32(0);
+      lbLaserDist.innerHTML = distance.toString() + "mm";
       lbIntTime.innerHTML = (event.target.value.getUint8(0)<<8 | event.target.value.getUint8(1)).toString() + " CPU clocks";
-
+      
+      if(logEn.innerHTML === "1"){
+        $("#log").append('<li class="list-group-item">'+distance.toString()+'</li>');
+        $("#log").scrollTop(nLogs*100); 
+        $("#log").last().focus();
+        nLogs++;
+      }
+      
       ccd.fill(0);
-      ccd[Math.round(num/0.0635)] = 2800;
+      ccd[Math.round(distance/0.0635)] = 2800;
       
 
       /*
@@ -109,6 +119,8 @@ function handleCCD(ccdData) {
 
         laserStart = event.target.value.getUint8(3);
         laserLenght = event.target.value.getUint8(4);
+        distance = ((event.target.value.getUint8(3)+(event.target.value.getUint8(4).toString()/2))*0.0635);
+
 
         if(ccdMode.innerHTML === "2"){
           chartLenght = laserLenght;
@@ -117,7 +129,7 @@ function handleCCD(ccdData) {
         lbLaserStart.innerHTML = "pixel number " + laserStart.toString();
         lbLaserLength.innerHTML = laserLenght.toString() + " pixels";
         lbIntTime.innerHTML = (event.target.value.getUint8(1)<<8 | event.target.value.getUint8(2)).toString() + " CPU clocks";
-        lbLaserDist.innerHTML = ((event.target.value.getUint8(3)+(event.target.value.getUint8(4).toString()/2))*0.0635).toString() + "mm";
+        lbLaserDist.innerHTML = distance.toString() + "mm";
       }
 
       for(var i=0 ; i<20 ; i+=2){
