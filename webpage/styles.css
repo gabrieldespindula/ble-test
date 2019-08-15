@@ -6,7 +6,6 @@
   bottom: 0;
   background-color: #7b7b7b;
   font-family: Roboto;
-  height: 90%;
 }
 
 #statusText {
@@ -29,4 +28,11 @@
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.list-group{
+    height: 200px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
 }
